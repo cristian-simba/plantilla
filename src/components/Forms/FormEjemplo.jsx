@@ -29,7 +29,7 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
 
     const obtenerDatos = async () => {
         try {
-            const response = await axios.get(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datosId}`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/estudiantes/${datosId}`);
             const datos = response.data;
             Object.keys(datos).forEach((key) => setValue(key, datos[key]));
         } catch (error) {
@@ -41,10 +41,10 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
         try {
             let response;
             if (datosId) {
-                response = await axios.put(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datosId}`, data);
+                response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/estudiantes/${datosId}`, data);
                 notifyActualizar()
             } else {
-                response = await axios.post(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes`, data);
+                response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/estudiantes`, data);
                 notifyRegistrar()
             }
             if (response.status === 201 || response.status === 200) {

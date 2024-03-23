@@ -12,9 +12,13 @@ const TablaEjemplo = () => {
     {/*CONSTANTES PARA OBTENER Y SETEAR DATOS EN LA TABLA,
         OJO CON LA SINTAXIS DE COMO DECLARAR LAS COLUMNAS
     */}
-
+    const [originalDatos, setOriginalDatos] = useState([]); // Agrega estado para almacenar los datos originales
+    const [search, setSearch] = useState("");
+    const [paginaActual, setPaginaActual] = useState(1);
+    const [porPagina] = useState(6);
     const [datos, setDatos] = useState([])
     const columnasDatos = ["cedula" , "nombre", "email", "carrera"]
+    
 
     const notifyEliminar = () => {
         toast.success("Se elimino el registro")
@@ -31,9 +35,9 @@ const TablaEjemplo = () => {
     useEffect(()=>{
         const obtenerDatos = async() => {
             try{
-                const response = await axios.get("https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes")
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/estudiantes`)
                 setDatos(response.data)
-                setOriginalBusqueda(response.data);
+                setOriginalDatos(response.data);
                 console.log(response.data)
             }catch(error){
                 console.log(error)
@@ -45,10 +49,10 @@ const TablaEjemplo = () => {
 
     const eliminarDato = async (datoID) => {
         try{
-            await axios.delete(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datoID}`)
-            const response = await axios.get("https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes")
-            setOriginalBusqueda(response.data);
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/estudiantes/${datoID}`)
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/estudiantes`)
             setDatos(response.data) 
+            setOriginalDatos(response.data);
             notifyEliminar()
         }catch(error){
             console.log(error)
@@ -60,29 +64,23 @@ const TablaEjemplo = () => {
         DE DATOS QUE SE QUIERE MOSTRAR EN PANTALLA
     */}
 
-    
-    const [originalBusqueda, setOriginalBusqueda] = useState([]);
-    const [busqueda, setBusqueda] = useState("");
 
-    const handleSearch = (e) => {
-        setBusqueda(e.target.value.toLowerCase());
+    const buscador = (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        setSearch(searchTerm);
+        if (searchTerm === "") {
+            setDatos(originalDatos); // Restaurar los datos originales cuando el término de búsqueda está vacío
+        } else {
+            const filtrarElementos = originalDatos.filter((dato) => {
+                return dato.nombre.toLowerCase().includes(searchTerm);
+            });
+            setDatos(filtrarElementos);
+        }
     };
-
-    const filtrarElementos = originalBusqueda.filter((dato) => {
-        return (
-            dato.nombre.toLowerCase().includes(busqueda) ||
-            dato.email.toLowerCase().includes(busqueda) ||
-            dato.carrera.toLowerCase().includes(busqueda) ||
-            dato.cedula.toString().includes(busqueda)
-        );
-    });
 
     {/*CONSTANTES PARA LA PAGINACIÓN, SE PUEDE CAMBIAR SOLO EL NÚMERO DE 
         ELEMENTOS QUE SE QUIERE MOSTRAR, NO ES NECESARIO CAMBIAR NADA
     */}
-
-    const [paginaActual, setPaginaActual] = useState(1);
-    const [porPagina] = useState(6);
     
     const ultimoIndice = paginaActual * porPagina;
     const primerIndice = ultimoIndice - porPagina;
@@ -97,16 +95,18 @@ const TablaEjemplo = () => {
      <>
         <div className="flex flex-row justify-between">
             <div className="flex-grow">
-                <SearchBar onSearch={handleSearch}/>
+                <SearchBar searchValue={search} onSearch={buscador} />
             </div>
             <AddRecordButton text="datos" to="/dashboard/ejemplo/registrar" />
         </div>
             <Tabla datos={actuales} columnas={columnasDatos}
             eliminar={eliminarDato} textoEliminar={"Datos"}
             noEncontrado={"datos"}
-            actualizarPath={"http://localhost:5173/dashboard/ejemplo/actualizar"}
+            actualizarPath={"/dashboard/ejemplo/actualizar"}
             />
-            <Paginacion paginaActual={paginaActual} paginasTotales={Math.ceil(filtrarElementos.length / porPagina)} cambiarPagina={cambiarPagina} />
+            <Paginacion paginaActual={paginaActual} 
+            paginasTotales={Math.ceil(datos.length / porPagina)}
+            cambiarPagina={cambiarPagina} />
 
      </>
     )
