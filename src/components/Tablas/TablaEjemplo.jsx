@@ -13,8 +13,8 @@ const TablaEjemplo = () => {
         OJO CON LA SINTAXIS DE COMO DECLARAR LAS COLUMNAS
     */}
 
-    const [estudiantes, setEstudiantes] = useState([])
-    const columnasEstudiantes = ["cedula" , "nombre", "email", "carrera"]
+    const [datos, setDatos] = useState([])
+    const columnasDatos = ["cedula" , "nombre", "email", "carrera"]
 
     const notifyEliminar = () => {
         toast.success("Se elimino el registro")
@@ -29,10 +29,10 @@ const TablaEjemplo = () => {
     }
 
     useEffect(()=>{
-        const obtenerEstudiante = async() => {
+        const obtenerDatos = async() => {
             try{
                 const response = await axios.get("https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes")
-                setEstudiantes(response.data)
+                setDatos(response.data)
                 setOriginalBusqueda(response.data);
                 console.log(response.data)
             }catch(error){
@@ -40,15 +40,15 @@ const TablaEjemplo = () => {
                 notifyErrorObtener()
             }
         }
-        obtenerEstudiante()
+        obtenerDatos()
     }, [])
 
-    const eliminarEstudiante = async (estudianteID) => {
+    const eliminarDato = async (datoID) => {
         try{
-            await axios.delete(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${estudianteID}`)
+            await axios.delete(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datoID}`)
             const response = await axios.get("https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes")
             setOriginalBusqueda(response.data);
-            setEstudiantes(response.data) 
+            setDatos(response.data) 
             notifyEliminar()
         }catch(error){
             console.log(error)
@@ -68,12 +68,12 @@ const TablaEjemplo = () => {
         setBusqueda(e.target.value.toLowerCase());
     };
 
-    const filtrarElementos = originalBusqueda.filter((estudiante) => {
+    const filtrarElementos = originalBusqueda.filter((dato) => {
         return (
-            estudiante.nombre.toLowerCase().includes(busqueda) ||
-            estudiante.email.toLowerCase().includes(busqueda) ||
-            estudiante.carrera.toLowerCase().includes(busqueda) ||
-            estudiante.cedula.toString().includes(busqueda)
+            dato.nombre.toLowerCase().includes(busqueda) ||
+            dato.email.toLowerCase().includes(busqueda) ||
+            dato.carrera.toLowerCase().includes(busqueda) ||
+            dato.cedula.toString().includes(busqueda)
         );
     });
 
@@ -87,8 +87,8 @@ const TablaEjemplo = () => {
     const ultimoIndice = paginaActual * porPagina;
     const primerIndice = ultimoIndice - porPagina;
     const actuales = [];
-    for (let i = primerIndice; i < ultimoIndice && i < estudiantes.length; i++) {
-        actuales.push(estudiantes[i]);
+    for (let i = primerIndice; i < ultimoIndice && i < datos.length; i++) {
+        actuales.push(datos[i]);
     }
     
     const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina); 
@@ -99,11 +99,11 @@ const TablaEjemplo = () => {
             <div className="flex-grow">
                 <SearchBar onSearch={handleSearch}/>
             </div>
-            <AddRecordButton text="estudiantes" to="/dashboard/ejemplo/registrar" />
+            <AddRecordButton text="datos" to="/dashboard/ejemplo/registrar" />
         </div>
-            <Tabla datos={actuales} columnas={columnasEstudiantes}
-            eliminar={eliminarEstudiante} textoEliminar={"Estudiante"}
-            noEncontrado={"estudiantes"}
+            <Tabla datos={actuales} columnas={columnasDatos}
+            eliminar={eliminarDato} textoEliminar={"Datos"}
+            noEncontrado={"datos"}
             actualizarPath={"http://localhost:5173/dashboard/ejemplo/actualizar"}
             />
             <Paginacion paginaActual={paginaActual} paginasTotales={Math.ceil(filtrarElementos.length / porPagina)} cambiarPagina={cambiarPagina} />

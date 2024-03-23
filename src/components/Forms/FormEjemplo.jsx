@@ -5,14 +5,13 @@ import { useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const FormEjemplo = ({ estudianteId, textBtn, onNotification }) => {
+const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const navigate = useNavigate();
-    const [mensaje, setMensaje] = ('')
 
     const notifyActualizar = () => {
         toast.success("Registro actualizado con éxito")
-      }
+    }
 
     const notifyRegistrar = () => {
         toast.success("Registro guardado con éxito")
@@ -23,44 +22,40 @@ const FormEjemplo = ({ estudianteId, textBtn, onNotification }) => {
     }
     
     useEffect(() => {
-        if (estudianteId) {
-            obtenerEstudiante();
+        if (datosId) {
+            obtenerDatos();
         }
-    }, [estudianteId]);
+    }, [datosId]);
 
-    const obtenerEstudiante = async () => {
+    const obtenerDatos = async () => {
         try {
-            const response = await axios.get(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${estudianteId}`);
-            const estudiante = response.data;
-            Object.keys(estudiante).forEach((key) => setValue(key, estudiante[key]));
+            const response = await axios.get(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datosId}`);
+            const datos = response.data;
+            Object.keys(datos).forEach((key) => setValue(key, datos[key]));
         } catch (error) {
-            console.error("Error al obtener estudiante:", error);
+            console.error("Error al obtener datos:", error);
         }
     };
 
     const onSubmit = async (data) => {
         try {
             let response;
-            if (estudianteId) {
-                response = await axios.put(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${estudianteId}`, data);
+            if (datosId) {
+                response = await axios.put(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes/${datosId}`, data);
                 notifyActualizar()
             } else {
                 response = await axios.post(`https://65f4cb2bf54db27bc022553c.mockapi.io/api/dashboard/estudiantes`, data);
                 notifyRegistrar()
             }
             if (response.status === 201 || response.status === 200) {
-                console.log("Estudiante guardado:", response.data);
+                console.log("Datos guardados:", response.data);
                 navigate('/dashboard/ejemplo/listar');
             }
         } catch (error) {
-            console.error("Error al guardar estudiante:", error);
+            console.error("Error al guardar datos:", error);
             notifyError()
         }
     };
-
-    const notifyMensaje = () => {
-        toast.info(mensaje)
-    }
     
     return (
         <div className="grid grid-cols-3 gap-4">
