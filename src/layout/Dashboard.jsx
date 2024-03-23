@@ -37,46 +37,54 @@ const Dashboard = () => {
   {/*CAMBIAR LAS RUTAS, TEXT E IMAGENES DEL SIDEBAR
     /dashboard/ruta_de_APP
 */}
-  return (
-    <>
-      {logged ? (
-        <div className="flex">
-          <ToastContainer/>
-          <Sidebar>
-            <Link to="/dashboard/ejemplo/listar">
-              <SidebarItem
-                icon={<UsersRound size={20} />}
-                text="Ruta 1"
-                active={isItemSelected('/dashboard/ejemplo/registrar')}
-                onClick={() => handleItemClick('/dashboard/ejemplo/registrar')}
-              />
-            </Link>
-            <Link to="ruta 2">
-              <SidebarItem
-                icon={<Notebook size={20} />}
-                text="Ruta 2"
-                active={isItemSelected('ruta 2')}
-                onClick={() => handleItemClick('ruta 2')}
-              />
-            </Link>
-            <Link to="ruta 3">
-              <SidebarItem
-                icon={<SquarePen size={20} />}
-                text="Ruta 3"
-                active={isItemSelected('ruta 3')}
-                onClick={() => handleItemClick('ruta 3')}
-              />
-            </Link>
-          </Sidebar>
-          <div className="flex-grow">
-            <Outlet />
-          </div>
+return (
+  <>
+    {logged ? (
+      <div className="flex">
+        <ToastContainer/>
+        <Sidebar>
+          <Link to="ruta 1">
+            <SidebarItem
+              icon={<Notebook size={20} />}
+              text="Ruta 1"
+              active={isItemSelected('ruta 1')}
+              onClick={() => handleItemClick('ruta 1')}
+            />
+          </Link>
+          <Link to="ruta 2">
+            <SidebarItem
+              icon={<Notebook size={20} />}
+              text="Ruta 2"
+              active={isItemSelected('ruta 2')}
+              onClick={() => handleItemClick('ruta 2')}
+            />
+          </Link>
+          <Link to="ruta 3">
+            <SidebarItem
+              icon={<SquarePen size={20} />}
+              text="Ruta 3"
+              active={isItemSelected('ruta 3')}
+              onClick={() => handleItemClick('ruta 3')}
+            />
+          </Link>
+          <Link to="/dashboard/ejemplo/listar">
+            <SidebarItem
+              icon={<UsersRound size={20} />}
+              text="Ruta Ejemplo"
+              active={isItemSelected('/dashboard/ejemplo/registrar')}
+              onClick={() => handleItemClick('/dashboard/ejemplo/registrar')}
+            />
+          </Link>
+        </Sidebar>
+        <div className="flex-grow">
+          <Outlet />
         </div>
-      ) : (
-        renderNotAuthorized && <NotAuthorized />
-      )}
-    </>
-  );
+      </div>
+    ) : (
+      renderNotAuthorized && <NotAuthorized />
+    )}
+  </>
+);
 };
 
 export default Dashboard;

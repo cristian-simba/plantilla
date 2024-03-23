@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const FormEjemplo = ({ estudianteId, textBtn, onNotification }) => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const [mensaje, setMensaje] = ('')
 
     const notifyActualizar = () => {
         toast.success("Registro actualizado con éxito")
@@ -57,6 +58,10 @@ const FormEjemplo = ({ estudianteId, textBtn, onNotification }) => {
         }
     };
 
+    const notifyMensaje = () => {
+        toast.info(mensaje)
+    }
+    
     return (
         <div className="grid grid-cols-3 gap-4">
             <form onSubmit={handleSubmit(onSubmit)} className="col-span-3">

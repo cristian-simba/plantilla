@@ -83,13 +83,15 @@ const TablaEjemplo = () => {
 
     const [paginaActual, setPaginaActual] = useState(1);
     const [porPagina] = useState(6);
-
+    
     const ultimoIndice = paginaActual * porPagina;
     const primerIndice = ultimoIndice - porPagina;
-    const actuales = filtrarElementos.slice(primerIndice, ultimoIndice);
-
-    const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
-
+    const actuales = [];
+    for (let i = primerIndice; i < ultimoIndice && i < estudiantes.length; i++) {
+        actuales.push(estudiantes[i]);
+    }
+    
+    const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina); 
 
     return (
      <>
