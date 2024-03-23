@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const [mensaje, setMensaje] = useState('')
 
     const notifyActualizar = () => {
         toast.success("Registro actualizado con éxito")
@@ -37,6 +38,7 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
         }
     };
 
+    
     const onSubmit = async (data) => {
         try {
             let response;
@@ -46,6 +48,15 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
             } else {
                 response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/estudiantes`, data);
                 notifyRegistrar()
+                
+                // if(response.data.message === "Estudiante registrado"){
+                //     console.log("Registro exitoso")
+                //     notifyRegistrar()
+                //     navigate('/dashboard/estudiantes')
+                // }else{
+                //     setMensaje(response.data.message)
+                //     notify()
+                // }
             }
             if (response.status === 201 || response.status === 200) {
                 console.log("Datos guardados:", response.data);
@@ -56,9 +67,14 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
             notifyError()
         }
     };
+
+    const notify = () => {
+        toast.info(mensaje)
+    }
     
     return (
         <div className="grid grid-cols-3 gap-4">
+            <ToastContainer/>
             <form onSubmit={handleSubmit(onSubmit)} className="col-span-3">
                 <div className="flex flex-col space-y-4">
                     <label htmlFor="nombre" className="block text-sm font-medium text-gray-900 dark:text-white">Nombre completo del estudiante</label>
