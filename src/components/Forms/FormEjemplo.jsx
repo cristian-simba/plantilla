@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -76,8 +76,10 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
         <div className="grid grid-cols-3 gap-4">
             <ToastContainer/>
             <form onSubmit={handleSubmit(onSubmit)} className="col-span-3">
+
                 <div className="flex flex-col space-y-4">
-                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-900 dark:text-white">Nombre completo del estudiante</label>
+                    <label htmlFor="nombre" className="block text-sm font-medium text-gray-900 dark:text-white">
+                    Nombre completo del..</label>
                     <input
                         type="text"
                         id="nombre"
@@ -104,8 +106,26 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
                                 })}                            />
                             {errors.cedula && <p className="text-red-500 text-sm">{errors.cedula.message}</p>}
                         </div>
+
+                        <div className="flex-2">
+                            <label htmlFor="celular" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Número de celular</label>
+                            <input
+                                type="text"
+                                id="celular"
+                                className={`mb-2 bg-gray-50 focus:outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.cedula ? 'border-red-500' : ''}`}
+                                placeholder="Ingrese el celular"
+                                {...register("celular", { 
+                                    required: "Este campo es requerido",
+                                    pattern: {
+                                        value: /^[0-9]{10}$/,
+                                        message: "El celular debe contener exactamente 10 dígitos"
+                                    }
+                                })}                            />
+                            {errors.cedula && <p className="text-red-500 text-sm">{errors.cedula.message}</p>}
+                        </div>
+
                         <div className="flex-1">
-                            <label htmlFor="email" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Correo Electrónico</label>
+                            <label htmlFor="email" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
                             <input
                                 type="email"
                                 id="email"
@@ -115,14 +135,30 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
                             />
                             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                         </div>
+
+                        <div className="flex-2">
+                            <label htmlFor="genero" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Género</label>
+                            <select {...register("genero",{
+                                required: true,
+                                message: "Seleecion una opcion"
+                            })}                                 
+                            className={`mb-2 bg-gray-50 focus:outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.cedula ? 'border-red-500' : ''}`}
+>
+                            <option value="" disabled selected>Seleccione una opcion</option>
+                            <option value="masculino">masculino</option>
+                            <option value="femenino">femenino</option>
+                            </select>                        
+                        </div>
+
                     </div>
-                    <label htmlFor="carrera" className="block text-sm font-medium text-gray-900 dark:text-white">Carrera que se encuentra cursando</label>
+
+                    <label htmlFor="direccion" className="block text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
                     <input
                         type="text"
-                        id="carrera"
+                        id="direccion"
                         className={`bg-gray-50 focus:outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.carrera ? 'border-red-500' : ''}`}
-                        placeholder="Ingrese la carrera"
-                        {...register("carrera", { required: "Este campo es requerido" })}
+                        placeholder="Ingrese la dirección"
+                        {...register("direccion", { required: "Este campo es requerido" })}
                     />
                     {errors.carrera && <p className="text-red-500 text-sm">{errors.carrera.message}</p>}
                 </div>
@@ -138,3 +174,23 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
 };
 
 export default FormEjemplo;
+
+{/* PARA MAPEAR EN OTRO LADO EL SELECT
+    <select
+        id="nombreMateria"
+        className="focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        name="nombreMateria" 
+        onChange={handleChange} 
+        value={form.nombreMateria}
+    >
+        <option>Materias Disponibles</option>
+        {materias && materias.length > 0 ? (
+            materias.map((materia) => (
+                <option key={materia._id} value={materia.nombremateria}>
+                    {materia.nombremateria}
+                </option>
+            ))
+        ) : (
+            <option disabled>No existen materias registradas</option>
+        )}
+    </select> */}
