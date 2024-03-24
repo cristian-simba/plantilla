@@ -14,7 +14,7 @@ npm i--save react-toastify
 <img src="https://github.com/cristian-simba/plantilla/assets/117742977/a01547fc-2f7c-4f1e-ad7b-30440ad41621"  width="200" height="200" />
 
 # Iconos
-<a href="https://lucide.dev/icons/"> Iconos</a>
+<a href="https://lucide.dev/icons/" _target="blank">Url de la pagina de iconos</a>
 
 # Despliegue a VERCEL
 Crear un archivo vercel.json en la raiz de frontend <br>
