@@ -10,6 +10,18 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
     const navigate = useNavigate();
     const [mensaje, setMensaje] = useState('')
 
+    const notify = () => {
+        if (mensaje.trim() !== '') { 
+            toast.info(mensaje);
+        }
+    }
+    
+    useEffect(() => {
+        if (mensaje.trim() !== '') { 
+            notify();
+        }
+    }, [mensaje]);
+    
     const notifyActualizar = () => {
         toast.success("Registro actualizado con éxito")
     }
@@ -66,11 +78,13 @@ const FormEjemplo = ({ datosId, textBtn, onNotification }) => {
             console.error("Error al guardar datos:", error);
             notifyError()
         }
+            // } catch (error) {
+            //     console.error("Error al guardar datos:", error);
+            //     setMensaje(error.response.data.message)
+            //     console.log(mensaje)
+            //     notify()
+            // }
     };
-
-    const notify = () => {
-        toast.info(mensaje)
-    }
     
     return (
         <div className="grid grid-cols-3 gap-4">
