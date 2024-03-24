@@ -207,4 +207,57 @@ export default FormEjemplo;
         ) : (
             <option disabled>No existen materias registradas</option>
         )}
-    </select> */}
+    </select> 
+
+FECHAS
+    const handleFechaChange = (e) => {
+        setFechaFormateada(e.target.value);
+    };
+
+    const obtenerDatos = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/citas/obtener/${datosId}`);
+            const datos = response.data;
+
+            const fecha = new Date(datos.fecha); 
+            const fechaFormateada = fecha.toISOString().split('T')[0]; 
+            setFechaFormateada(fechaFormateada);......
+
+            <label htmlFor="fecha" className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Fecha de consulta</label>
+            <input
+                type="date"
+                id="fecha"
+                required
+                className={`mb-2 bg-gray-50 focus:outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.email ? 'border-red-500' : ''}`}
+                {...register("fecha", {required: "La fecha es requerida", message: "Escoge una fecha"})}
+                value={fechaFormateada} 
+                onChange={handleFechaChange} // Agregar el evento onChange para actualizar el valor en react-hook-form
+
+            />
+            {errors.fecha && <p className="text-red-500 text-sm">{errors.fecha.message}</p>}
+        </div>
+    
+    CHECKBOX
+<label className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Especialidades</label>
+{especialidad && especialidad.length > 0 ? (
+    especialidad.map((materia) => (
+        <div key={materia._id} className="flex items-center mb-2">
+            <input
+                type="checkbox"
+                id={materia._id}
+                value={materia.nombre}
+                {...register("especialidad", {
+                    required: true,
+                    message: "Selecciona al menos una especialidad",
+                })}
+                className="mr-2"
+            />
+            <label htmlFor={materia._id} className="text-sm">
+                {materia.nombre}
+            </label>
+        </div>
+    ))
+) : (
+    <p className="text-gray-500">No existen especialidades registradas</p>
+)}
+*/}
